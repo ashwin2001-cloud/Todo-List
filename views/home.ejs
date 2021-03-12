@@ -1,0 +1,94 @@
+<!-- function for converting date into readible string -->
+<!-- function is called inside class task-details -->
+<% function convert(d){ 
+     var str= d.toString(); 
+     var date = new Date(str), 
+     mnth = ("0" + (date.getMonth() + 1)).slice(-2), 
+       day = ("0" + date.getDate()).slice(-2); 
+       return [date.getFullYear(), mnth, day].join("-"); 
+   } %>
+
+<!-- html starts from here -->
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
+        <!-- fontawesome -->
+	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <title>Todo List</title>
+    </head>
+    
+    <body>
+        <header>
+            <h1>Todo App</h1>
+            <form action="/create-task" method="POST">
+                <div id="desc-container">
+                    <label style="display: block;">DESCRIPTION</label>
+                    <input id="desc" name="task" type="text" placeholder="What do you need to do?">
+                </div>
+                <!-- big-container contains category-container and date-container -->
+                <div id="big-container">
+                    
+                    <span id="category-container" style="border:none;">
+                        
+                        <label style="display:block;">CATEGORY</label>
+                        <input name="category" type="text" list="category">
+            
+                        <!--datalist Tag starts here -->
+                        <datalist id="category">
+                            <option value="Personal"/>
+                            <option value="Work"/>
+                            <option value="School"/>
+                            <option value="Cleaning"/>
+                            <option value="Other"/>
+                        </datalist>
+
+                    </span>
+
+                    <span id="date-container" style="border:none;">
+                        <div><label>DUE DATE</label></div>
+                        <input id="date" name="date" type="date">
+                    </span>
+                    
+                </div>
+                <div id="button-container">
+                    <button type="submit">
+                        <i class="fas fa-plus"></i>
+                        <span>ADD TASK</span>
+                    </button>
+                </div>
+            </form>
+        </header>
+
+        <main>  
+            <ul type="none">
+                <% for(let i of tasksList){ %>
+
+                    <li class="task-container">
+
+                        <!-- contains task details like task-name and date -->
+                        <div class="task-details">
+                            <span style="width:50%; text-align:center;"><%= i.task %></span>
+                            <span style="width:50%; margin-left:80px;">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span style="font-size:14px;"><%= convert(i.date) %></span>
+                            </span>
+                        </div>
+                        
+                        <!-- contains task-category -->
+                        <div style="width:15%;" class="<%= i.category %>">
+                            <p style="border:1px solid black;"><%= i.category %></p>
+                        </div>
+
+                        <!-- trash button for deleting task -->
+                        <div style="display:flex; align-items: center; width:5%;">
+                            <a style="color:black;" href="/delete-task/?id=<%= i._id %>"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </li>
+                <% } %>
+            </ul>
+
+        </main>
+
+        
+    </body>
+</html>
